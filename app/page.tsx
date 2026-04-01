@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Button from "../src/components/button";
+import logo from "../src/ikon/kunci.png";
 
 export default function Home() {
   const router = useRouter();
@@ -11,52 +13,61 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-4xl flex overflow-hidden">
-        {/* LEFT SIDE (Logo + Nama Web) */}
-        <div className="w-1/2 bg-blue-600 text-white flex flex-col items-center justify-center p-8">
-          {/* Logo */}
-          <img
-            src="/logo.png" // taruh file logo di public/logo.png
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-yellow-500 to-orange-600 text-black">
+      <div className="bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-4xl flex overflow-hidden border border-zinc-700">
+        {/* LEFT SIDE */}
+        <div className="w-1/2 bg-black text-white flex flex-col items-center justify-center p-8">
+          <Image
+            src={logo}
             alt="Logo"
-            className="w-24 h-24 mb-4"
+            width={100}
+            height={100}
+            className="mb-4 drop-shadow-lg"
           />
 
-          {/* Nama Web */}
-          <h1 className="text-3xl font-bold text-center">CodeLogicCraft</h1>
+          <h1 className="text-3xl font-bold text-center">TEROSIER</h1>
 
           <p className="text-sm mt-2 text-center opacity-80">
-            Belajar coding jadi lebih seru 🚀
+            Join untuk jadi member TEROSIER ga si 🚀
           </p>
         </div>
 
-        {/* RIGHT SIDE (Form Login) */}
-        <div className="w-1/2 p-8">
+        {/* RIGHT SIDE */}
+        <div className="w-1/2 p-8 text-white">
           <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
 
           <form className="space-y-4">
             <input
               type="text"
               placeholder="Username"
-              className="w-full p-2 border rounded-lg"
+              className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
 
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-2 border rounded-lg"
+              className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
 
-            <div className="flex justify-between text-sm text-gray-600">
-              <span className="cursor-pointer hover:text-blue-500">
+            <div className="flex justify-between text-sm text-zinc-400">
+              <span className="cursor-pointer hover:text-orange-400">
                 Lupa password?
               </span>
-              <span className="cursor-pointer hover:text-blue-500">
+              <span
+                onClick={() => router.push("/register")}
+                className="cursor-pointer hover:text-orange-400"
+              >
                 Register
               </span>
             </div>
 
-            <Button text="Login" onClick={handleLogin} />
+            <button
+              type="button"
+              onClick={handleLogin}
+              className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 text-black font-semibold py-2 rounded-lg hover:scale-105 transition"
+            >
+              Login
+            </button>
           </form>
         </div>
       </div>
