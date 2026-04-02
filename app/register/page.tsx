@@ -1,15 +1,82 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
 import Button from "../../src/components/button";
 import closeIcon from "../../src/ikon/close.svg";
 
+type FormType = {
+  nama: string;
+  tempat: string;
+  tanggal: string;
+  alamat: string;
+  hp: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  bagian: string;
+  disabilitas: string;
+  alasan: string;
+  sumber: string;
+};
+
 export default function RegisterPage() {
   const router = useRouter();
 
-  const handleRegister = () => {
-    console.log("Register clicked");
+  const [form, setForm] = useState<FormType>({
+    nama: "",
+    tempat: "",
+    tanggal: "",
+    alamat: "",
+    hp: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    bagian: "",
+    disabilitas: "",
+    alasan: "",
+    sumber: "",
+  });
+  const handleChange = (field: keyof FormType, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleRegister = async () => {
+    if (!form.nama || !form.email || !form.password) {
+      alert("Nama, email, dan password wajib diisi!");
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      alert("Password tidak sama!");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Register berhasil!");
+        router.push("/");
+      } else {
+        alert(data.message || "Gagal register");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi error");
+    }
   };
 
   return (
@@ -35,6 +102,7 @@ export default function RegisterPage() {
               type="text"
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Masukkan nama lengkap"
+              onChange={(e) => handleChange("nama", e.target.value)}
             />
           </div>
 
@@ -46,6 +114,7 @@ export default function RegisterPage() {
                 type="text"
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
                 placeholder="Contoh: Bandung"
+                onChange={(e) => handleChange("tempat", e.target.value)}
               />
             </div>
 
@@ -54,6 +123,7 @@ export default function RegisterPage() {
               <input
                 type="date"
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+                onChange={(e) => handleChange("tanggal", e.target.value)}
               />
             </div>
           </div>
@@ -65,6 +135,7 @@ export default function RegisterPage() {
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
               rows={3}
               placeholder="Masukkan alamat lengkap"
+              onChange={(e) => handleChange("alamat", e.target.value)}
             />
           </div>
 
@@ -75,6 +146,7 @@ export default function RegisterPage() {
               type="text"
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
               placeholder="08xxxxxxxxxx"
+              onChange={(e) => handleChange("hp", e.target.value)}
             />
           </div>
 
@@ -85,6 +157,7 @@ export default function RegisterPage() {
               type="email"
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
               placeholder="email@gmail.com"
+              onChange={(e) => handleChange("email", e.target.value)}
             />
           </div>
 
@@ -94,6 +167,7 @@ export default function RegisterPage() {
             <input
               type="password"
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("password", e.target.value)}
             />
           </div>
 
@@ -103,19 +177,21 @@ export default function RegisterPage() {
             <input
               type="password"
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("confirmPassword", e.target.value)}
             />
           </div>
 
           {/* Pilih Bagian */}
           <div>
             <label className="text-sm font-medium">Pilih bagian</label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500">
-              <option>Pilih bagian</option>
-              <option>Navigation</option>
-              <option>Swiper</option>
-              <option>Leader</option>
-              <option>Medice</option>
-              <option>Koki</option>
+            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("bagian", e.target.value)}>
+              <option value="">Pilih Bagian</option>
+              <option value="ng">Navigator</option>
+              <option value="sw">Swiper</option>
+              <option value="la">Leader</option>
+              <option value="md">Medice</option>
+              <option value="kk">Koki</option>
             </select>
           </div>
 
@@ -124,10 +200,11 @@ export default function RegisterPage() {
             <label className="text-sm font-medium">
               Apakah kamu disabilitas?
             </label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500">
-              <option>Pilih</option>
-              <option>Tidak</option>
-              <option>Ya</option>
+            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("disabilitas", e.target.value)}>
+              <option value="">Disabilitas?</option>
+              <option value="Tidak">Tidak</option>
+              <option value="Ya">Ya</option>
             </select>
           </div>
 
@@ -140,6 +217,7 @@ export default function RegisterPage() {
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
               rows={3}
               placeholder="Tulis alasan kamu..."
+              onChange={(e) => handleChange("alasan", e.target.value)}
             />
           </div>
 
@@ -148,12 +226,13 @@ export default function RegisterPage() {
             <label className="text-sm font-medium">
               Mengetahui Terosier dari
             </label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500">
-              <option>Pilih</option>
-              <option>Instagram</option>
-              <option>Teman</option>
-              <option>Website</option>
-              <option>Lainnya</option>
+            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("sumber", e.target.value)}>
+              <option value="">Pilih</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Teman">Teman</option>
+              <option value="Website">Website</option>
+              <option value="Lainnya">Lainnya</option>
             </select>
           </div>
 
