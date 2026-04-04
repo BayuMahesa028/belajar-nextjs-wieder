@@ -1,0 +1,58 @@
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    kode_user VARCHAR(50) UNIQUE,
+    nama_lengkap VARCHAR(255) NOT NULL,
+    tempat_lahir VARCHAR(100),
+    tanggal_lahir DATE,
+    alamat TEXT,
+    no_hp VARCHAR(20),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    bagian VARCHAR(50),
+    disabilitas BOOLEAN DEFAULT FALSE,
+    alasan TEXT,
+    sumber_info VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users
+ADD COLUMN role INTEGER NOT NULL DEFAULT 1
+CHECK (role IN (1, 2));
+
+
+--------------------cara membuat akun admin secara manul
+1. CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+2. 
+INSERT INTO users (
+    kode_user,
+    nama_lengkap,
+    tempat_lahir,
+    tanggal_lahir,
+    alamat,
+    no_hp,
+    email,
+    password,
+    bagian,
+    disabilitas,
+    alasan,
+    sumber_info,
+    role
+)
+VALUES (
+    generate_kode_user('Sebastian jr', 'Bandung', '2024-04-29'),
+    'Sebastian jr',
+    'Bandung',
+    '2024-04-29',
+    'admin',
+    '085695597188',
+    'kijna7@gmail.com',
+    crypt('Kijna7788', gen_salt('bf')), -- 🔥 sekarang aman
+    'ad',
+    false,
+    'admin',
+    'admin',
+    1
+);
