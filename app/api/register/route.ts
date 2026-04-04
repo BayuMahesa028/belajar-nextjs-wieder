@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import bcrypt from "bcrypt";
 import twilio from "twilio";
+import { cookies } from "next/headers";
 
 const client = twilio(process.env.TWILIO_SID!, process.env.TWILIO_AUTH_TOKEN!);
 
@@ -123,6 +124,28 @@ export async function POST(req: Request) {
       to: `whatsapp:${finalPhone}`,
       body: `Kode verifikasi kamu: ${verificationCode}`,
     });
+
+    // ✅ bikin response dulu
+    const response = NextResponse.json({
+      message: "Register berhasil, cek WhatsApp untuk OTP",
+    });
+
+    // ✅ set cookie
+    response.cookies.set(
+      "verify_data",
+      JSON.stringify({
+        nama_lengkap: nama,
+        email: email,
+        no_hp: finalPhone,
+      }),
+      {
+        httpOnly: true,
+        secure: false, // true kalau production
+        maxAge: 60 * 10,
+        path: "/",
+      },
+    );
+    return response;
 
     return NextResponse.json({
       message: "Register berhasil, cek WhatsApp untuk OTP",
