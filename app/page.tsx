@@ -1,15 +1,45 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
 import Button from "../src/components/button";
 import logo from "../src/ikon/kunci.png";
 
 export default function Home() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    router.push("/homeUser");
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Gagal login");
+      }
+
+      alert("Login berhasil!");
+
+      router.push("/homeUser");
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,13 +69,17 @@ export default function Home() {
           <form className="space-y-4">
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
 
             <input
               type="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
 
@@ -64,9 +98,11 @@ export default function Home() {
             <button
               type="button"
               onClick={handleLogin}
+              disabled={loading}
               className="w-full bg-gradient-to-r from-yellow-500 to-orange-600 text-black font-semibold py-2 rounded-lg hover:scale-105 transition"
             >
-              Login
+
+              {loading ? "Loading..." : "Login"}
             </button>
           </form>
         </div>
