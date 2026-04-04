@@ -76,3 +76,26 @@ VALUES (
     'admin',
     1
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+gatau kode dari twilwo untuk kode verifykasi (E62WX1A84TBGSWUNK3FFVEFF)

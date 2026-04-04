@@ -26,29 +26,31 @@ export async function POST(req: Request) {
     }
 
     // ✅ MASUKKAN KE users
+    const kodeUser = `USR-${Date.now()}`;
+
     await pool.query(
       `
-      INSERT INTO users (
-        kode_user,
-        nama_lengkap,
-        tempat_lahir,
-        tanggal_lahir,
-        alamat,
-        no_hp,
-        email,
-        password,
-        bagian,
-        disabilitas,
-        alasan,
-        sumber_info,
-        role
-      )
-      VALUES (
-        generate_kode_user($1,$2,$3),
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
-      )
-    `,
+  INSERT INTO users (
+    kode_user,
+    nama_lengkap,
+    tempat_lahir,
+    tanggal_lahir,
+    alamat,
+    no_hp,
+    email,
+    password,
+    bagian,
+    disabilitas,
+    alasan,
+    sumber_info,
+    role
+  )
+  VALUES (
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13
+  )
+`,
       [
+        kodeUser,
         user.nama_lengkap,
         user.tempat_lahir,
         user.tanggal_lahir,

@@ -4,53 +4,73 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function VerifyPage() {
-    const params = useSearchParams();
-    const router = useRouter();
+  const params = useSearchParams();
+  const router = useRouter();
 
-    const email = params.get("email");
+  const email = params.get("email");
 
-    const [code, setCode] = useState("");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const handleVerify = async () => {
-        const res = await fetch("/api/verify", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, code }),
-        });
+  const handleVerify = async () => {
+    if (!email) {
+      alert("Email tidak ditemukan di URL");
+      return;
+    }
 
-        const data = await res.json();
+    if (!code) {
+      alert("Masukkan kode verifikasi");
+      return;
+    }
 
-        if (!res.ok) {
-            alert(data.message);
-            return;
-        }
+    try {
+      setLoading(true);
 
-        alert("Verifikasi berhasil!");
-        router.push("/");
-    };
+      const res = await fetch("/api/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, code }),
+      });
 
-    return (
-        <div className="h-screen flex items-center justify-center bg-black text-white">
-            <div className="bg-zinc-900 p-6 rounded-xl w-80">
-                <h1 className="text-xl mb-4">Verifikasi Email</h1>
+      const data = await res.json();
 
-                <input
-                    type="text"
-                    placeholder="Masukkan kode"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="w-full p-2 bg-zinc-800 border rounded mb-4"
-                />
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
 
-                <button
-                    onClick={handleVerify}
-                    className="w-full bg-orange-500 p-2 rounded"
-                >
-                    Verifikasi
-                </button>
-            </div>
-        </div>
-    );
+      alert("Verifikasi berhasil!");
+      router.push("/");
+    } catch (err) {
+      alert("Terjadi kesalahan, coba lagi");
+    } finally {
+      setLoading(false); // ✅ pasti jalan
+    }
+  };
+
+  return (
+    <div className="h-screen flex items-center justify-center bg-black text-white">
+      <div className="bg-zinc-900 p-6 rounded-xl w-80">
+        <h1 className="text-xl mb-4">Verifikasi Email</h1>
+
+        <input
+          type="text"
+          placeholder="Masukkan kode"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          className="w-full p-2 bg-zinc-800 border rounded mb-4"
+        />
+
+        <button
+          onClick={handleVerify}
+          disabled={loading}
+          className="w-full bg-orange-500 p-2 rounded"
+        >
+          {loading ? "Memverifikasi..." : "Verifikasi"}
+        </button>
+      </div>
+    </div>
+  );
 }

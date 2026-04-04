@@ -1,23 +1,9 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import bcrypt from "bcrypt";
-import { Resend } from "resend";
+import twilio from "twilio";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-interface RegisterBody {
-  nama: string;
-  tempat: string;
-  tanggal: string;
-  alamat: string;
-  hp: string;
-  email: string;
-  password: string;
-  bagian: string;
-  disabilitas: string;
-  alasan: string;
-  sumber: string;
-}
+const client = twilio(process.env.TWILIO_SID!, process.env.TWILIO_AUTH_TOKEN!);
 
 export async function POST(req: Request) {
   try {
@@ -38,19 +24,19 @@ export async function POST(req: Request) {
     } = body;
 
     // VALIDASI
-    if (!nama || !email || !password) {
+    if (!nama || !email || !password || !hp) {
       return NextResponse.json(
-        { message: "Nama, email, password wajib diisi" },
+        { message: "Field wajib belum lengkap" },
         { status: 400 },
       );
     }
 
-    // CEK EMAIL SUDAH ADA
+    // CEK EMAIL
     const checkUser = await pool.query(
       `
-        SELECT email FROM pending_users WHERE email = $1
-        UNION
-        SELECT email FROM users WHERE email = $1
+      SELECT email FROM pending_users WHERE email = $1
+      UNION
+      SELECT email FROM users WHERE email = $1
       `,
       [email],
     );
@@ -65,12 +51,31 @@ export async function POST(req: Request) {
     // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //Buat kode Verifikasi
+    // FORMAT NOMOR
+    let formattedHp = hp.trim();
+
+    if (formattedHp.startsWith("08")) {
+      formattedHp = "62" + formattedHp.slice(1);
+    }
+
+    if (formattedHp.startsWith("+62")) {
+      formattedHp = formattedHp.slice(1);
+    }
+
+    if (!formattedHp.startsWith("62")) {
+      return NextResponse.json(
+        { message: "Nomor harus format Indonesia" },
+        { status: 400 },
+      );
+    }
+
+    const finalPhone = `+${formattedHp}`;
+
+    // OTP
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000,
     ).toString();
 
-    // ROLE OTOMATIS ADMIN
     const role = 2;
 
     const query = `
@@ -92,7 +97,6 @@ export async function POST(req: Request) {
       VALUES (
         $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13
       )
-      RETURNING *;
     `;
 
     const values = [
@@ -100,7 +104,7 @@ export async function POST(req: Request) {
       tempat,
       tanggal,
       alamat,
-      hp,
+      finalPhone, // ✅ FIX
       email,
       hashedPassword,
       bagian,
@@ -113,25 +117,18 @@ export async function POST(req: Request) {
 
     await pool.query(query, values);
 
-    await resend.emails.send({
-      from: "onboarding@resend.dev", // default dari resend
-      to: email,
-      subject: "Verifikasi Akun TEROSIER",
-      html: `
-    <div style="font-family:sans-serif">
-      <h2>Halo ${nama} 👋</h2>
-      <p>Gunakan kode berikut untuk verifikasi akun:</p>
-      <h1 style="letter-spacing:5px">${verificationCode}</h1>
-      <p>Kode ini berlaku beberapa menit.</p>
-    </div>
-  `,
+    // KIRIM WA
+    await client.messages.create({
+      from: "whatsapp:+14155238886",
+      to: `whatsapp:${finalPhone}`,
+      body: `Kode verifikasi kamu: ${verificationCode}`,
     });
+
     return NextResponse.json({
-      success: true,
-      message: "Kode verifikasi dikirim",
+      message: "Register berhasil, cek WhatsApp untuk OTP",
     });
   } catch (err: any) {
-    console.error("ERROR ASLI:", err); // 🔥 debug penting
+    console.error("ERROR ASLI:", err);
 
     return NextResponse.json(
       { message: err.message || "Internal server error" },
