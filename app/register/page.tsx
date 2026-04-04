@@ -69,7 +69,7 @@ export default function RegisterPage() {
 
       if (res.ok) {
         alert("Register berhasil!");
-        router.push("/");
+        router.push(`/verify?email=${form.email}`);
       } else {
         alert(data.message || "Gagal register");
       }

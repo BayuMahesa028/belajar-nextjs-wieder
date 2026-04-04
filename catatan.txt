@@ -1,3 +1,22 @@
+------------------------ membuat pending_user
+CREATE TABLE pending_users (
+    id SERIAL PRIMARY KEY,
+    nama_lengkap VARCHAR(255),
+    tempat_lahir VARCHAR(100),
+    tanggal_lahir DATE,
+    alamat TEXT,
+    no_hp VARCHAR(20),
+    email VARCHAR(255) UNIQUE,
+    password TEXT,
+    bagian VARCHAR(50),
+    disabilitas BOOLEAN,
+    alasan TEXT,
+    sumber_info VARCHAR(100),
+    role INTEGER,
+    verification_code VARCHAR(10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -20,6 +39,7 @@ CREATE TABLE users (
 ALTER TABLE users
 ADD COLUMN role INTEGER NOT NULL DEFAULT 1
 CHECK (role IN (1, 2));
+
 
 
 --------------------cara membuat akun admin secara manul
