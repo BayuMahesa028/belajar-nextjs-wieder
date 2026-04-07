@@ -84,7 +84,9 @@ export default function Home() {
             />
 
             <div className="flex justify-between text-sm text-zinc-400">
-              <span className="cursor-pointer hover:text-orange-400">
+              <span className="cursor-pointer hover:text-orange-400"
+                onClick={() => router.push("/lupaPassword")}
+              >
                 Lupa password?
               </span>
               <span
