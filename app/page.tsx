@@ -28,16 +28,27 @@ export default function Home() {
 
       if (!res.ok) {
         alert(data.message || "Gagal login");
+        return; // Stop eksekusi jika gagal
       }
 
-      alert("Login berhasil!");
+      // Ambil role langsung dari response API login
+      // Pastikan backend kamu mengirimkan data user dalam response login-nya
+      const role = data.user?.role;
 
-      router.push("/homeUser");
-    }
-    catch (error) {
-      console.error(error);
-    }
-    finally {
+      if (role === 2) {
+        // Sesuai query SQL sebelumnya, role 2 biasanya Admin
+        router.push("/homeUser");
+      } else if (role === 1) {
+        // Role 1 biasanya User biasa
+        router.push("/homeAdmin");
+      } else {
+        alert("Role tidak valid atau tidak ditemukan");
+      }
+
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Terjadi kesalahan pada server");
+    } finally {
       setLoading(false);
     }
   };

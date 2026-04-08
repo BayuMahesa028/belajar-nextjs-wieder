@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-export default function HomeUserPages() {
+export default function HomeAdminPages() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State untuk mobile menu
@@ -13,7 +13,7 @@ export default function HomeUserPages() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/homeUser");
+        const res = await fetch("/api/homeAdmin");
         const data = await res.json();
         if (!res.ok) {
           alert(data.message || "Gagal login");

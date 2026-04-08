@@ -43,9 +43,6 @@ CHECK (role IN (1, 2));
 
 
 --------------------cara membuat akun admin secara manul
-1. CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
-2. 
 INSERT INTO users (
     kode_user,
     nama_lengkap,
@@ -62,17 +59,17 @@ INSERT INTO users (
     role
 )
 VALUES (
-    generate_kode_user('Sebastian jr', 'Bandung', '2024-04-29'),
-    'Sebastian jr',
-    'Bandung',
-    '2024-04-29',
-    'admin',
-    '085695597188',
-    'kijna7@gmail.com',
-    crypt('Kijna7788', gen_salt('bf')), -- 🔥 sekarang aman
-    'ad',
-    false,
-    'admin',
-    'admin',
-    1
+    'ADM-2024-001',         -- Input manual karena function generate_kode_user belum ada/error
+    'Admin Marbay',         
+    'Jakarta',              
+    '1990-01-01',           
+    'Kantor MarbayStore',   
+    '081234567890',         
+    'admin@marbaystore.com',
+    crypt('Admin123!', gen_salt('bf')), 
+    'Management',           
+    false,                  
+    'Akun Utama Admin',     
+    'Sistem Internal',      
+    1                       
 );
