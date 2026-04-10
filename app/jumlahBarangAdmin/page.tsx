@@ -160,24 +160,61 @@ export default function JumlahBarangAdmin() {
 
         {/* TABLE */}
         <div className="bg-white rounded-2xl border overflow-hidden">
-          <table className="w-full">
-            <tbody>
+          <table className="w-full text-left">
+            {/* HEADER */}
+            <thead className="bg-slate-50 border-b">
+              <tr className="text-[11px] font-bold uppercase text-slate-400">
+                <th className="p-4">Foto</th>
+                <th className="p-4">Nama</th>
+                <th className="p-4">Kode</th>
+                <th className="p-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y">
               {barang.map((item: any) => (
                 <tr key={item.kode_barang} className="hover:bg-orange-50">
+                  {/* FOTO */}
                   <td
                     className="p-4 cursor-pointer"
+                    onClick={() => openDetail(item)}
+                  >
+                    {item.fotos && item.fotos.length > 0 ? (
+                      <img
+                        src={item.fotos[0]}
+                        className="w-12 h-12 object-cover rounded-lg border"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-xs text-slate-400">
+                        No Img
+                      </div>
+                    )}
+                  </td>
+
+                  {/* NAMA */}
+                  <td
+                    className="p-4 font-semibold cursor-pointer hover:text-orange-600"
                     onClick={() => openDetail(item)}
                   >
                     {item.nama_barang}
                   </td>
 
+                  {/* KODE */}
+                  <td
+                    className="p-4 font-mono text-xs text-orange-600 cursor-pointer"
+                    onClick={() => openDetail(item)}
+                  >
+                    {item.kode_barang}
+                  </td>
+
+                  {/* AKSI */}
                   <td className="p-4 text-center">
                     <button
                       onClick={() => {
                         setSelectedDelete(item.kode_barang);
                         setShowDelete(true);
                       }}
-                      className="text-red-500 text-xs"
+                      className="px-3 py-1 text-xs font-bold text-red-500 bg-red-50 border border-red-200 rounded-lg hover:bg-red-500 hover:text-white transition"
                     >
                       Hapus
                     </button>
@@ -193,7 +230,9 @@ export default function JumlahBarangAdmin() {
       {isModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center">
           <div
-            className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition ${showModalContent ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition ${
+              showModalContent ? "opacity-100" : "opacity-0"
+            }`}
             onClick={closeModal}
           />
 
@@ -202,7 +241,17 @@ export default function JumlahBarangAdmin() {
               showModalContent ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <h2 className="text-lg font-bold mb-4">Tambah Barang</h2>
+            {/* HEADER + CLOSE */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Tambah Barang</h2>
+
+              <button
+                onClick={closeModal}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-red-500 hover:text-white transition"
+              >
+                ✕
+              </button>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <input
