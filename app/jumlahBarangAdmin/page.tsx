@@ -254,10 +254,10 @@ export default function JumlahBarangAdmin() {
             {/* HEADER */}
             <thead className="bg-slate-50 border-b">
               <tr className="text-[11px] font-bold uppercase text-slate-400">
-                <th className="p-4">Foto</th>
-                <th className="p-4">Nama</th>
-                <th className="p-4">Kode</th>
-                <th className="p-4 text-center">Aksi</th>
+                <th className="p-4 text-orange-400">Foto</th>
+                <th className="p-4 text-orange-400">Nama</th>
+                <th className="p-4 text-orange-400">Kode</th>
+                <th className="p-4 text-orange-400 text-center">Aksi</th>
               </tr>
             </thead>
 
