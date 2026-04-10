@@ -93,3 +93,13 @@ VALUES (
     'Sistem Internal',      
     1                       
 );
+
+------------------------table barang
+
+CREATE TABLE barang (
+    kode_barang VARCHAR(50) PRIMARY KEY,
+    nama_barang VARCHAR(255) NOT NULL,
+    rincian_barang TEXT,
+    fotos TEXT[] DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
