@@ -1,0 +1,35 @@
+1. membuat table barang yang berupa
+a. foto bisa lebih dari 1
+b. nama barang
+c. kode barang
+d. rincian barang
+
+
+2. barangTable admin 
+
+.1 admin dapat mengupload barang berupa
+a. foto bisa lebih dari 1
+b. nama barang
+c. kode barang berupa (karakter nama depan, tengah, belakang, tanggal bulan tahun)
+d. rincian barang
+
+.2 admin dapat menghapus barang tinggal x dan konfirmasi saja jika data tersebut tidak ada yang mencekout lagi(menselect data checkout yang berisi sudah bayar)
+
+
+3. membuat store pages yang berisi:
+
+.1
+a. nama produk
+b. rincian produk
+c. Harga produk
+d. bintang nya
+
+
+e. bisa di check out langsung
+ada data sudah bayar, lalu dikonfirmasi admin
+
+f. masuk ke keranjang
+ada data dengan nilai belum bayar
+
+.2 membuat checkout pages:
+a. menampilkan data table barang yang di check out datanya belum bayar
