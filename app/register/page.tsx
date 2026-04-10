@@ -184,8 +184,10 @@ export default function RegisterPage() {
           {/* Pilih Bagian */}
           <div>
             <label className="text-sm font-medium">Pilih bagian</label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
-              onChange={(e) => handleChange("bagian", e.target.value)}>
+            <select
+              className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("bagian", e.target.value)}
+            >
               <option value="">Pilih Bagian</option>
               <option value="ng">Navigator</option>
               <option value="sw">Swiper</option>
@@ -200,8 +202,10 @@ export default function RegisterPage() {
             <label className="text-sm font-medium">
               Apakah kamu disabilitas?
             </label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
-              onChange={(e) => handleChange("disabilitas", e.target.value)}>
+            <select
+              className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("disabilitas", e.target.value)}
+            >
               <option value="">Disabilitas?</option>
               <option value="Tidak">Tidak</option>
               <option value="Ya">Ya</option>
@@ -226,8 +230,10 @@ export default function RegisterPage() {
             <label className="text-sm font-medium">
               Mengetahui Terosier dari
             </label>
-            <select className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
-              onChange={(e) => handleChange("sumber", e.target.value)}>
+            <select
+              className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded-lg mt-1 focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => handleChange("sumber", e.target.value)}
+            >
               <option value="">Pilih</option>
               <option value="Instagram">Instagram</option>
               <option value="Teman">Teman</option>
