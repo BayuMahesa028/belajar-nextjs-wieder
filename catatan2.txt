@@ -26,10 +26,28 @@ d. bintang nya
 
 
 e. bisa di check out langsung
-ada data sudah bayar, lalu dikonfirmasi admin
+ada data sudah bayar, lalu dikonfirmasi admin, langsung mengurangkan jumlah barang di table barang
+
 
 f. masuk ke keranjang
-ada data dengan nilai belum bayar
+ada data dengan nilai belum bayar, langsung mengurangkan jumlah barang di table barang,
+dapat memasukkan barang sebanyak apapun
+
 
 .2 membuat checkout pages:
 a. menampilkan data table barang yang di check out datanya belum bayar
+b. bisa di checklist jika ada barang berbeda
+c. bisa di total barang yang bisa dicheckout
+
+.3 konfirmasi pembayaran (popup):
+a. memasukkan alamat (bisa sesuai alamat yang sama dari cookies, bisa juga berbeda)
+b. bukti pembayaran berupa foto
+
+.4 konfirmasi oleh admin:
+a. dapat melihat deteil data dengan pop up
+b. konfirmasi ya dan tidak 
+c. jika tidak buat notif ada kesalahan (notifnya dimasukkan ke database)
+d. jika iya buat notif tanggal berapa tiba nya barang ke tempat (masuk ke database)
+
+4. membuat pop up notif user:
+.1 dapat melihat notif berupa pop up
